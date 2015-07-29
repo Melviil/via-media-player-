@@ -53,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
         bar.postDelayed(new Runnable() {
             @Override
             public void run() {
-                bar.setProgress(i++);
+                bar.setProgress(player.getCurrentPosition());
                 bar.postDelayed(this, 100);
             }
         }, 100);
