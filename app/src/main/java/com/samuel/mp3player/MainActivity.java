@@ -1,5 +1,6 @@
 package com.samuel.mp3player;
 
+import android.graphics.Path;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +10,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -18,13 +30,40 @@ public class MainActivity extends ActionBarActivity {
     MediaPlayer player;
     EditText etUrl;
     int i;
+    Map<TextView,File> mpFTV;
+    TextView textView;
+    File f;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        i = 0;
+        linearLayout = (LinearLayout)findViewById(R.id.ll);
+        mpFTV = new HashMap<>();
+        f =  new File("/");
         etUrl = (EditText) findViewById(R.id.editText);
+        File[] files;
+        files = f.listFiles();
+
+        for (final File fi : files){
+            if (fi.getName().contains(".mp3")) {
+                textView = new TextView(getApplicationContext());
+                textView.setText(fi.getName());
+                mpFTV.put(textView, fi);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        player = MediaPlayer.create(getApplicationContext(), Uri.parse(mpFTV.get(v).getAbsolutePath()));
+                        TextView tv = (TextView) v;
+                        etUrl.setText(tv.getText().toString());
+                    }
+                });
+                linearLayout.addView(textView);
+            }
+          }
+        i = 0;
+
         buttons = new Button[]{(Button) findViewById(R.id.stop), (Button) findViewById(R.id.play), (Button) findViewById(R.id.pause)};
         bar = (SeekBar) findViewById(R.id.seekBar);
         player = MediaPlayer.create(getApplicationContext(), Uri.parse(etUrl.getText().toString()));
