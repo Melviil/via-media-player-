@@ -3,6 +3,7 @@ package com.samuel.mp3player;
 import android.graphics.Path;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         linearLayout = (LinearLayout)findViewById(R.id.ll);
         mpFTV = new HashMap<>();
-        f =  new File("/");
+        f =  new File(Environment.getExternalStorageDirectory().getPath()+"/Music");
         etUrl = (EditText) findViewById(R.id.editText);
         File[] files;
         files = f.listFiles();
