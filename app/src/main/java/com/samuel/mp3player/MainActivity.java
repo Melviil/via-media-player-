@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,53 +33,48 @@ public class MainActivity extends ActionBarActivity {
     SeekBar bar;
     MediaPlayer player;
     EditText etUrl;
-    int i;
-    Map<TextView,File> mpFTV;
+    Map<String,File> mpFTV;
     TextView textView;
     File f;
-    LinearLayout linearLayout;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        linearLayout = (LinearLayout)findViewById(R.id.ll);
         mpFTV = new HashMap<>();
         f =  new File(Environment.getExternalStorageDirectory().getPath()+"/Music");
         etUrl = (EditText) findViewById(R.id.editText);
         File[] files;
         files = f.listFiles();
-
+        listView = (ListView)findViewById(R.id.listView);
         for (final File fi : files){
             if (fi.getName().contains(".mp3")) {
-                textView = new TextView(getApplicationContext());
-                textView.setText(fi.getName());
-                mpFTV.put(textView, fi);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        player = MediaPlayer.create(getApplicationContext(), Uri.parse(mpFTV.get(v).getAbsolutePath()));
-                        TextView tv = (TextView) v;
-                        etUrl.setText(tv.getText().toString());
-                    }
-                });
-                linearLayout.addView(textView);
+                mpFTV.put(fi.getName(), fi);
             }
-          }
-        i = 0;
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, mpFTV.keySet().toArray(new String[mpFTV.size()]));
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                player = MediaPlayer.create(getApplicationContext(), Uri.parse(mpFTV.get(listView.getItemAtPosition(position).toString()).getAbsolutePath()));
+                etUrl.setText(listView.getItemAtPosition(position).toString());
+            }
+        });
 
         buttons = new Button[]{(Button) findViewById(R.id.stop), (Button) findViewById(R.id.play), (Button) findViewById(R.id.pause)};
         bar = (SeekBar) findViewById(R.id.seekBar);
         player = MediaPlayer.create(getApplicationContext(), Uri.parse(etUrl.getText().toString()));
         buttons[0].setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              player.seekTo(0);
-                                              bar.setProgress(0);
-                                              player.pause();
-                                          }
-                                      }
-        );
+            @Override
+            public void onClick(View v) {
+                player.seekTo(0);
+                bar.setProgress(0);
+                player.pause();
+            }
+        });
         buttons[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
