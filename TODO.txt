@@ -1,2 +1,2 @@
 Improve interface.
-
+Bug when the app launches without internet
