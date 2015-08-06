@@ -33,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
     SeekBar bar;
     MediaPlayer player;
     EditText etUrl;
-    Map<String,File> mpFTV;
+    Map<String, File> mpFTV;
     File f;
     ListView listView;
 
@@ -42,13 +42,15 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mpFTV = new HashMap<>();
-        f =  new File(Environment.getExternalStorageDirectory().getPath()+"/Music");
+        f = new File(Environment.getExternalStorageDirectory().getPath() + "/Music");
         etUrl = (EditText) findViewById(R.id.editText);
+        String test = etUrl.getText().toString();
         File[] files;
         files = f.listFiles();
-        listView = (ListView)findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
+        player = MediaPlayer.create(getApplicationContext(), Uri.parse(test));
         bar = (SeekBar) findViewById(R.id.seekBar);
-        for (final File fi : files){
+        for (final File fi : files) {
             if (fi.getName().contains(".mp3")) {
                 mpFTV.put(fi.getName(), fi);
             }
@@ -67,7 +69,6 @@ public class MainActivity extends ActionBarActivity {
         });
 
         buttons = new Button[]{(Button) findViewById(R.id.stop), (Button) findViewById(R.id.play), (Button) findViewById(R.id.pause)};
-        player = MediaPlayer.create(getApplicationContext(), Uri.parse(etUrl.getText().toString()));
         buttons[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser){
+                if (fromUser) {
                     player.seekTo(progress);
                     seekBar.setProgress(progress);
                 }
@@ -139,7 +140,8 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void chgMusic(){
+
+    public void chgMusic() {
         this.bar.setMax(player.getDuration());
         this.player.seekTo(0);
         this.bar.setProgress(0);
