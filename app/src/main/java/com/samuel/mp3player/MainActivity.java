@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -16,12 +17,14 @@ import android.widget.SeekBar;
 
 public class MainActivity extends Activity {
     Boolean connected;
-    Button[] buttons;
+    public static Button[] buttons;
     SeekBar bar;
     EditText etUrl;
     Mp3Service mp3Service;
     Button choose;
     String nameSong;
+
+    //public static Button playB;  //define it globally
 
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -44,6 +47,7 @@ public class MainActivity extends Activity {
         choose = (Button) findViewById(R.id.choose);
         etUrl = (EditText) findViewById(R.id.editText);
         bar = (SeekBar) findViewById(R.id.seekBar);
+        //playB = (Button) findViewById(R.id.play);  //put it inside the oncreate of main activity
         buttons = new Button[]{(Button) findViewById(R.id.stop), (Button) findViewById(R.id.play), (Button) findViewById(R.id.pause)};
         buttons[0].setOnClickListener(new View.OnClickListener() {
             @Override

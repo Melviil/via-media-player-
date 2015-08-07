@@ -66,7 +66,9 @@ public class ExplorerActivity extends Activity {
                     changeFolder(heyWhatSUp.getAbsolutePath());
                 }
                 if (heyWhatSUp.getName().contains(".mp3")) {
-                    mp3Service.changeMusic(heyWhatSUp.getPath(),heyWhatSUp.getName());
+                    mp3Service.changeMusic(heyWhatSUp.getPath(), heyWhatSUp.getName());
+                    finish();
+                    MainActivity.buttons[1].performClick();
                 }
             }
         });
